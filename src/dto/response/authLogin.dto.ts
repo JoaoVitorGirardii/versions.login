@@ -4,6 +4,7 @@ export class AuthLoginResponseDto {
 }
 
 export class UserDto {
-  id: string;
+  id?: string;
   name: string;
+  email: string;
 }

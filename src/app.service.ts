@@ -1,27 +1,38 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { AuthLoginDto } from './dto/request/authLogin.dto';
+import { CommandsAuth } from './const/commandsAuth.const';
+import { CommandsUsuario } from './const/commandsUsuario.const';
+import { AuthLoginDto, UserCreate } from './dto/request/authLogin.dto';
 import { AuthLoginResponseDto, UserDto } from './dto/response/authLogin.dto';
-import { Commands } from './enum/commands.enum';
 
 @Injectable()
 export class AppService {
-  constructor(@Inject('AUTH_SERVICE') private clientProxy: ClientProxy) {}
+  constructor(
+    @Inject('AUTH_SERVICE') private authClientProxy: ClientProxy,
+    @Inject('USUARIO_SERVICE') private usuarioClientProxy: ClientProxy,
+  ) {}
 
   async login(payload: AuthLoginDto): Promise<UserDto> {
-    console.log('chegou aqui no LOGIN: ', payload);
-
     const response = await firstValueFrom<AuthLoginResponseDto>(
-      this.clientProxy.send({ command: Commands.USER_LOGIN }, payload),
+      this.authClientProxy.send({ command: CommandsAuth.LOGIN }, payload),
     );
-
-    console.log('response: ', response);
 
     if (response.valid && response.user) {
       return response.user;
     }
 
     throw new UnauthorizedException('Usuário não autorizado');
+  }
+
+  async createUser(body: UserCreate): Promise<UserDto | void> {
+    const userCreated = await firstValueFrom<UserDto>(
+      this.usuarioClientProxy.send(
+        { command: CommandsUsuario.USER_CREATE },
+        body,
+      ),
+    );
+
+    return userCreated;
   }
 }
