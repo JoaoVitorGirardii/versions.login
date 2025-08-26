@@ -1,0 +1,2 @@
+export const USUARIO_SERVICE = 'USUARIO_SERVICE';
+export const AUTH_SERVICE = 'AUTH_SERVICE';

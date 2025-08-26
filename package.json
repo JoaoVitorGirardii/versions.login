@@ -69,6 +69,13 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/",
+      "src/main.ts",
+      "src/app.module.ts",
+      "src/dto/response/authLogin.dto.ts"
+    ]
   }
 }

@@ -3,14 +3,15 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { CommandsAuth } from './const/commandsAuth.const';
 import { CommandsUsuario } from './const/commandsUsuario.const';
+import { AUTH_SERVICE, USUARIO_SERVICE } from './const/services.const';
 import { AuthLoginDto, UserCreate } from './dto/request/authLogin.dto';
 import { AuthLoginResponseDto, UserDto } from './dto/response/authLogin.dto';
 
 @Injectable()
 export class AppService {
   constructor(
-    @Inject('AUTH_SERVICE') private authClientProxy: ClientProxy,
-    @Inject('USUARIO_SERVICE') private usuarioClientProxy: ClientProxy,
+    @Inject(AUTH_SERVICE) private authClientProxy: ClientProxy,
+    @Inject(USUARIO_SERVICE) private usuarioClientProxy: ClientProxy,
   ) {}
 
   async login(payload: AuthLoginDto): Promise<UserDto> {
