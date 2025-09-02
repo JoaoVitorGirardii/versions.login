@@ -1,4 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { CommandsAuth } from './const/commandsAuth.const';
@@ -23,17 +28,24 @@ export class AppService {
       return response.user;
     }
 
-    throw new UnauthorizedException('Usuário não autorizado');
+    throw new UnauthorizedException(
+      'Usuário não autorizado, verifique seus dados',
+    );
   }
 
   async createUser(body: UserCreate): Promise<UserDto | void> {
-    const userCreated = await firstValueFrom<UserDto>(
-      this.usuarioClientProxy.send(
-        { command: CommandsUsuario.USER_CREATE },
-        body,
-      ),
-    );
+    try {
+      const userCreated = await firstValueFrom<UserDto>(
+        this.usuarioClientProxy.send(
+          { command: CommandsUsuario.USER_CREATE },
+          body,
+        ),
+      );
 
-    return userCreated;
+      return userCreated;
+    } catch (error) {
+      console.error('Erro[createUser]: ', error);
+      throw new InternalServerErrorException('Erro ao tentar criar o usuário.');
+    }
   }
 }
