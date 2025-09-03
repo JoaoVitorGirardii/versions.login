@@ -10,7 +10,11 @@ import { CommandsAuth } from './const/commandsAuth.const';
 import { CommandsUsuario } from './const/commandsUsuario.const';
 import { AUTH_SERVICE, USUARIO_SERVICE } from './const/services.const';
 import { AuthLoginDto, UserCreate } from './dto/request/authLogin.dto';
-import { AuthLoginResponseDto, UserDto } from './dto/response/authLogin.dto';
+import {
+  AuthLoginResponseDto,
+  ResponseLoginDto,
+  UserDto,
+} from './dto/response/authLogin.dto';
 
 @Injectable()
 export class AppService {
@@ -19,13 +23,16 @@ export class AppService {
     @Inject(USUARIO_SERVICE) private usuarioClientProxy: ClientProxy,
   ) {}
 
-  async login(payload: AuthLoginDto): Promise<UserDto> {
+  async login(payload: AuthLoginDto): Promise<ResponseLoginDto> {
     const response = await firstValueFrom<AuthLoginResponseDto>(
       this.authClientProxy.send({ command: CommandsAuth.LOGIN }, payload),
     );
 
-    if (response.valid && response.user) {
-      return response.user;
+    if (response.valid && response.user && response.tokenJwt) {
+      return {
+        user: response.user,
+        token: response.tokenJwt,
+      };
     }
 
     throw new UnauthorizedException(
