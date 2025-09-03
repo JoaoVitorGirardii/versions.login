@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class AuthLoginResponseDto {
   valid: boolean;
   user?: UserDto;
@@ -11,6 +13,9 @@ export class UserDto {
 }
 
 export class ResponseLoginDto {
+  @ApiProperty({ description: 'Dados basicos do usuário' })
   user: UserDto;
+
+  @ApiProperty({ description: 'Token de acesso do usuário' })
   token: string;
 }
