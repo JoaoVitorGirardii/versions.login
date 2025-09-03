@@ -2,7 +2,7 @@
 
 versions.login modulo do projeto responsável por realizar o login do usuário e seu cadastro.
 Aqui é onde temos os endpoint disponíveis para serem consumidos por um front end por exemplo.
-Este modulo tem comunicação com o `usuarios` e com `auth`, cada um com sua responsabilidade e o modulo login intermediando a comunicação entre os dois serviços.
+Este modulo tem comunicação com o `versions.usuarios` e com `versions.auth`, cada um com sua responsabilidade e o modulo login intermediando a comunicação entre os dois serviços.
 O projeto do login esta todo documentado com o swagger sendo possível visualizar seus endpoint e os requisitos de cada endpoint.
 
 ## Tecnologias Utilizadas
